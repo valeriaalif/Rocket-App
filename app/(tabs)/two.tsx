@@ -1,31 +1,39 @@
-import { StyleSheet } from 'react-native';
+import { StyleProp, View } from 'react-native'
+import React from 'react'
+import { Avatar, Button, Card, Text } from 'react-native-paper';
+import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
+import { ThemeProp } from 'react-native-paper/lib/typescript/types';
+import { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
+import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
 
-export default function TabTwoScreen() {
+
+export default function Page() {
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
-  );
+    <View style={{ flex: 1, justifyContent: 'center'}}>
+    <Card>
+    <Card.Content>
+    <View style={{ backgroundColor: '#6200ee', padding: 10, borderRadius: 5, marginBottom: 15 }}>
+      <Text variant="titleLarge" style={{ color: 'white' }}>Manejo de Bases de Datos con PowerBI</Text>
+      </View>
+      <Text variant="bodyMedium">Docente: Karla Vega</Text>
+      <Text variant="bodyMedium">Fecha de Inicio: 12 de Junio 2024</Text>
+      <Text variant="bodyMedium">Fecha de Finalización: 23 de Junio 2024</Text>
+      <Text variant="bodyMedium">Horario: Lunes a Miércoles</Text>
+      <Text variant="bodyMedium">Cierre de Inscripción: 09 de Junio 2024</Text>
+      <Text variant="bodyMedium">Duración: 2 semanas</Text>
+      <Text variant="bodyMedium">Inversión Total: 6 horas</Text>
+      <Text variant="bodyMedium">Plataforma: Zoom</Text>
+      <Text variant="bodyMedium">Modalidad: Virtual</Text>
+      <Text variant="bodyMedium">Disponiblidad: Hay Cupos</Text>
+    </Card.Content>
+   {/*<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />*/}
+    <Card.Actions>
+      <Button>Cancel</Button>
+      <Button>Ok</Button>
+    </Card.Actions>
+  </Card>
+  </View>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
