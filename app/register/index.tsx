@@ -5,7 +5,14 @@ import { PaperProvider } from 'react-native-paper';
 import { TextInput, Text, Button } from 'react-native-paper';
 
 export default function Register() {
-  const [text, setText] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [nationalId, setnationalId] = React.useState("");
+  const [age, setAge] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [nationality, setNationality] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image 
@@ -17,50 +24,50 @@ export default function Register() {
      
       <TextInput
      label="Nombre Completo"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={name}
+     onChangeText={text => setName(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Cédula"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={nationalId}
+     onChangeText={text => setnationalId(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Edad"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={age}
+     onChangeText={text => setAge(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Teléfono"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={phone}
+     onChangeText={text => setPhone(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Nacionalidad"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={nationality}
+     onChangeText={text => setNationality(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Correo Electrónico"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={email}
+     onChangeText={text => setEmail(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
        <TextInput
      label="Contraseña"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={password}
+     onChangeText={text => setPassword(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />

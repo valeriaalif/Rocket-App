@@ -10,7 +10,8 @@ import { TextInput, Text, Button } from 'react-native-paper';
 
 export default function Page() {
 
-  const [text, setText] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   return (
     <PaperProvider>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -28,19 +29,19 @@ export default function Page() {
             Rocket Girls
           </Text>
         </View>
-        <Text variant="headlineMedium" style={{ marginBottom: 10, marginTop: 10, fontWeight: 'bold' }}>Inicia Sesión</Text>
+        <Text variant="headlineMedium" style={{  }}>Inicia Sesión</Text>
      
       <TextInput
      label="Correo Electrónico"
-     value={text}
-     onChangeText={text => setText(text)}
+     value={email}
+     onChangeText={text => setEmail(text)}
      mode="outlined"
      style={{ width: 300, height: 50 }} 
       />
       <TextInput
       label="Contraseña"
-      value={text}
-      onChangeText={text => setText(text)}
+      value={password}
+      onChangeText={text => setPassword(text)}
       mode="outlined" 
       style={{ width: 300, height: 50, marginBottom: 10 }} 
     />
@@ -50,7 +51,7 @@ export default function Page() {
             ¿Olvidaste tu Contraseña?
           </Text>
         </Link>
-      <Link href="/one" asChild>
+      <Link href="/(tabs)/rocketStudent" asChild>
         <Button mode="contained" 
          buttonColor="#6200ee"
           style={{ paddingHorizontal: 72, height: 56 }} 

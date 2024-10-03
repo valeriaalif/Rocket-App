@@ -6,7 +6,7 @@ export default function _layout() {
   return (
     <Stack>
         <Stack.Screen name="index" options={{
-            title: 'Posts'
+            title: 'TechAcademy'
         }} />
         <Stack.Screen name="[id]" options={{
             title: 'Post details'
