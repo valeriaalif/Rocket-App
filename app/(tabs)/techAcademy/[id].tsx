@@ -57,14 +57,13 @@ export default function Page() {
 
     useEffect(() => {
       const fetchCourse = async () => {
-        console.log("Fetching course from:", apiUrl); // Log the API URL
+   
         try {
           const response = await axios.get(`${apiUrl}/api/getCourse/${id}`);
-          console.log("Fetched courses data:", response.data); // Log the fetched data
           setCourse(response.data);
           setLoading(false);
         } catch (err) {
-          console.error("Error fetching course:", err); // Log any error
+          console.error("Error fetching course:", err); 
           setError('Failed to load course');
           setLoading(false);
         }

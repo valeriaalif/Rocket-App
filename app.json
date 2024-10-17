@@ -13,7 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "extra": {
-     "API_URL": "http://192.168.86.233:4000" 
+     "API_URL": "https://d688-143-255-29-0.ngrok-free.app"
     },
     "assetBundlePatterns": [
       "**/*"
