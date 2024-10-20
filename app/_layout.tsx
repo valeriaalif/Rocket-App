@@ -19,9 +19,9 @@ export default function _layout() {
         }} />
         <Stack.Screen name="register/index" options={{
             title: 'Register',
-           // headerRight: ()=>(
-               // <Button title="Login" onPress={()=> router.push('/login')} />
-            //)
+            headerRight: ()=>(
+                <Button title="Login" onPress={()=> router.push('/login')} />
+            ),
             headerShown: false
         }} />
         <Stack.Screen name="login" options={{

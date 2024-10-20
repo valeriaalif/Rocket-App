@@ -32,6 +32,10 @@ export default function Page() {
       // Store the token in AsyncStorage
       await AsyncStorage.setItem('userToken', token);
 
+       // Clear input fields after successful login
+       setEmail('');
+       setPassword('');
+
       // Handle successful login, e.g., show a success message
       Alert.alert('Login Successful!', 'You have successfully logged in.');
 
