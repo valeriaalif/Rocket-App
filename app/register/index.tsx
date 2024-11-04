@@ -124,6 +124,7 @@ export default function Register() {
      value={password}
      onChangeText={text => setPassword(text)}
      mode="outlined"
+     secureTextEntry
      style={{ width: 300, height: 50 }} 
       />
  <Button
