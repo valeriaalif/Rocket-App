@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the CourseInfo interface
 interface CourseInfo {
@@ -21,7 +23,7 @@ interface CourseInfo {
 }
 
 export default function Page() {
-    const {id} = useLocalSearchParams();
+  const { id: courseId } = useLocalSearchParams(); // Fetch courseId from URL
     const [course, setCourse] = useState<CourseInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -54,23 +56,66 @@ export default function Page() {
 
 
     const apiUrl = Constants.expoConfig?.extra?.API_URL;
-
     useEffect(() => {
       const fetchCourse = async () => {
-   
         try {
-          const response = await axios.get(`${apiUrl}/api/getCourse/${id}`);
+          const response = await axios.get(`${apiUrl}/api/getCourse/${courseId}`);
           setCourse(response.data);
-          setLoading(false);
         } catch (err) {
-          console.error("Error fetching course:", err); 
+          console.error("Error fetching course:", err);
           setError('Failed to load course');
+        } finally {
           setLoading(false);
         }
       };
   
-      fetchCourse();
-    }, [apiUrl, id]);
+      if (courseId) {
+        fetchCourse();
+      } else {
+        setError('Course ID is missing in URL parameters.');
+        setLoading(false);
+      }
+    }, [apiUrl, courseId]);
+
+    const handleSubmit = async () => {
+      try {
+        // Get the User ID from the JWT token
+        const token = await AsyncStorage.getItem('userToken');
+        if (!token) {
+          Alert.alert("Error", "User is not authenticated.");
+          return;
+        }
+  
+        const decoded: any = jwtDecode(token);
+        const Id = decoded.Id; // Ensure this matches the structure of your JWT
+  
+        // Prepare the form data
+        const formData = {
+          Userid: Id,
+          courseId, // Include courseId from URL parameters
+          academicDegree: education,
+          children,
+          birthDate,
+          province,
+          district,
+          area,
+          organization,
+          englishLevel,
+        };
+  
+        // Send form data to the API
+        await axios.post(`${apiUrl}/api/registerUserTechAcademy`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        Alert.alert("Success", "User registered successfully");
+      } catch (err) {
+        console.error("Error submitting form:", err);
+        Alert.alert("Error", "Failed to submit the form.");
+      }
+    };
+  
+  
   
     if (loading) {
       return (
@@ -273,17 +318,15 @@ export default function Page() {
       />
     </View>
 
-     
-      <Link href="/" asChild>
         <Button 
           mode="contained" 
           buttonColor="#6200ee"
           style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }} 
           labelStyle={{ fontSize: 16, lineHeight: 34 }} 
+          onPress={handleSubmit}  
         >  
           Inscribirse
         </Button>
-      </Link>
     </View>
   
     </View>
