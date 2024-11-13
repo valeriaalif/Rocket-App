@@ -9,6 +9,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 
+
 // Define the CourseInfo interface
 interface CourseInfo {
   id: string;
@@ -20,6 +21,19 @@ interface CourseInfo {
   requirements: string;
   description: string;
   content: string;
+}
+
+interface FormData {
+  userId: string;
+  courseId: string;
+  academicDegree: string;
+  children: string;
+  birthDate: string; // or string if you prefer
+  province: string;
+  district: string;
+  area: string;
+  organization: string;
+  englishLevel: string;
 }
 
 export default function Page() {
@@ -54,7 +68,6 @@ export default function Page() {
 ]);
   
 
-
     const apiUrl = Constants.expoConfig?.extra?.API_URL;
     useEffect(() => {
       const fetchCourse = async () => {
@@ -77,6 +90,7 @@ export default function Page() {
       }
     }, [apiUrl, courseId]);
 
+
     const handleSubmit = async () => {
       try {
         // Get the User ID from the JWT token
@@ -90,9 +104,9 @@ export default function Page() {
         const Id = decoded.Id; // Ensure this matches the structure of your JWT
   
         // Prepare the form data
-        const formData = {
-          Userid: Id,
-          courseId, // Include courseId from URL parameters
+        const formData: FormData = {
+          userId: Id, // Assuming Id is of type `string`
+          courseId: String(courseId), // Convert courseId to string here
           academicDegree: education,
           children,
           birthDate,
@@ -259,9 +273,7 @@ export default function Page() {
       </View>
 
       </View>
-
    
-
       <View style={{ marginBottom: 16 }}>
         <Text style={{ marginBottom: 4 }}>Provincia</Text>
         <TextInput
