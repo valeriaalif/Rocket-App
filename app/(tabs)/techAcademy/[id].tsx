@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { View, ScrollView, Image, Alert } from 'react-native';
 import axios from 'axios';
-import { Button, Card, Text, TextInput } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Button, Card, Text, TextInput, Title } from 'react-native-paper';
+import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,8 +24,8 @@ interface CourseInfo {
 }
 
 interface FormData {
-  userId: string;
-  courseId: string;
+  userName: string;
+  courseTitle: string;
   academicDegree: string;
   children: string;
   birthDate: string; // or string if you prefer
@@ -101,12 +101,12 @@ export default function Page() {
         }
   
         const decoded: any = jwtDecode(token);
-        const Id = decoded.Id; // Ensure this matches the structure of your JWT
+        const userName = decoded.userName; // Ensure this matches the structure of your JWT
   
         // Prepare the form data
         const formData: FormData = {
-          userId: Id, // Assuming Id is of type `string`
-          courseId: String(courseId), // Convert courseId to string here
+          userName: userName, 
+          courseTitle: course?.title|| '' , 
           academicDegree: education,
           children,
           birthDate,
@@ -116,6 +116,9 @@ export default function Page() {
           organization,
           englishLevel,
         };
+
+            // Log formData to verify its structure
+            console.log("Form Data:", formData);
   
         // Send form data to the API
         await axios.post(`${apiUrl}/api/registerUserTechAcademy`, formData, {
@@ -123,7 +126,9 @@ export default function Page() {
         });
   
         Alert.alert("Success", "User registered successfully");
+        router.push('/(tabs)/techAcademy'); 
       } catch (err) {
+        
         console.error("Error submitting form:", err);
         Alert.alert("Error", "Failed to submit the form.");
       }
@@ -183,6 +188,7 @@ export default function Page() {
   </View>
 
        {/* Display the course details */}
+
        <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 }}>
           {course?.title}
         </Text>
