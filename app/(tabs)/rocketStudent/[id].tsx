@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { Button, Card, Text, TextInput, FAB, IconButton,MD3Colors } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the CourseInfo interface
 interface CourseInfo {
@@ -20,19 +22,32 @@ interface CourseInfo {
   content: string;
 }
 
+
+interface FormData {
+  userName: string;
+  courseTitle: string;
+  age: string;
+  academicDegree: string;
+  area: string; // or string if you prefer
+  province: string;
+  district: string;
+  student: string;
+  organization: string;
+}
+
+
 export default function Page() {
   const { id } = useLocalSearchParams();
   const [course, setCourse] = useState<CourseInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [birthDate, setbirthDate] = React.useState("");
+  const [age, setAge] = React.useState("");
   const [province, setProvince] = React.useState("");
   const [area, setArea] = React.useState("");
   const [district, setDistrict] = React.useState("");
   const [education, setEducation] = React.useState("");
-  const [children, setChildren] = React.useState("");
+  const [student, setStudent] = React.useState("");
   const [organization, setOrganization] = React.useState("");
-  const [englishLevel, setEnglishLevel] = React.useState("");
   const [openEducation, setOpenEducation] = useState(false);
   const [itemsEducation, setItemsEducation] = useState([
     { label: 'Primaria', value: 'Primaria' },
@@ -42,14 +57,7 @@ export default function Page() {
     { label: 'Postgrado', value: 'Postgrado' },
   ]);
 
-  const [openEnglish, setOpenEnglish] = useState(false);
-  const [itemsEnglish, setItemsEnglish] = useState([
-    { label: 'Básico', value: 'Básico' },
-    { label: 'Intermedio', value: 'Intermedio' },
-    { label: 'Avanzado', value: 'Avanzado' },
-    { label: 'Bilingue', value: 'Bilingue' },
-    { label: 'Nativo', value: 'Nativo' },
-  ]);
+
 
 
 
@@ -72,6 +80,50 @@ export default function Page() {
 
     fetchCourse();
   }, [apiUrl, id]);
+
+  
+  const handleSubmit = async () => {
+    try {
+      // Get the User ID from the JWT token
+      const token = await AsyncStorage.getItem('userToken');
+      if (!token) {
+        Alert.alert("Error", "User is not authenticated.");
+        return;
+      }
+
+      const decoded: any = jwtDecode(token);
+      const userName = decoded.userName; // Ensure this matches the structure of your JWT
+
+      // Prepare the form data
+      const formData: FormData = {
+        userName: userName, 
+        courseTitle: course?.title|| '' , 
+        academicDegree: education,
+        age,
+        student,
+        province,
+        district,
+        area,
+        organization,
+      };
+
+          // Log formData to verify its structure
+          console.log("Form Data:", formData);
+
+      // Send form data to the API
+      await axios.post(`${apiUrl}/api/registerRocketStudent`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      Alert.alert("Success", "User registered successfully");
+      router.push('/(tabs)/rocketStudent'); 
+    } catch (err) {
+      
+      console.error("Error submitting form:", err);
+      Alert.alert("Error", "Failed to submit the form.");
+    }
+  };
+
 
   if (loading) {
     return (
@@ -204,20 +256,20 @@ export default function Page() {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
           <View style={{ flex: 1, marginRight: 10 }}>
-            <Text style={{ marginBottom: 4 }}>¿Tienes Hijos? (Sí/No)</Text>
+            <Text style={{ marginBottom: 4 }}>¿Eres un estudiante activo? (Sí/No)</Text>
             <TextInput
-              value={children}
-              onChangeText={text => setChildren(text)}
+              value={student}
+              onChangeText={text => setStudent(text)}
               mode="outlined"
               style={{ height: 50 }}
             />
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text style={{ marginBottom: 4 }}>Fecha de Nacimiento</Text>
+            <Text style={{ marginBottom: 4 }}>Edad</Text>
             <TextInput
-              value={birthDate}
-              onChangeText={text => setbirthDate(text)}
+              value={age}
+              onChangeText={text => setAge(text)}
               mode="outlined"
               style={{ height: 50 }}
             />
@@ -268,31 +320,15 @@ export default function Page() {
         </View>
 
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 4 }}>Nivel de Inglés</Text>
-          <DropDownPicker
-            open={openEnglish}
-            value={englishLevel}
-            items={itemsEnglish}
-            setOpen={setOpenEnglish}
-            setValue={setEnglishLevel}
-            setItems={setItemsEnglish}
-            listMode="SCROLLVIEW"
-            placeholder="Selecciona el nivel de inglés"
-            style={{ width: 360, height: 50 }}
-          />
-        </View>
-
-
-        <Link href="/" asChild>
+       
           <Button mode="contained"
             buttonColor="#6200ee"
             style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
             labelStyle={{ fontSize: 16, lineHeight: 34 }}
+            onPress={handleSubmit}  
           >
             Inscribirse
           </Button>
-        </Link>
 
     </ScrollView>
   )
