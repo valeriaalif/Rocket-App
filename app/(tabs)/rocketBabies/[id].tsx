@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Link, router} from 'expo-router';
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the CourseInfo interface
 interface CourseInfo {
@@ -19,12 +21,33 @@ interface CourseInfo {
   content: string;
 }
 
+
+interface FormData {
+  userName: string;
+  courseTitle: string;
+  parent: string;
+  age: string;
+  birthDate: string;
+  area: string; 
+  province: string;
+  district: string;
+  kidName: string;
+}
+
+
 export default function Page() {
-    const {id} = useLocalSearchParams();
+    const {id: courseId} = useLocalSearchParams();
     const [course, setCourse] = useState<CourseInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [text, setText] = React.useState("");
+    const [parent, setParent] = React.useState("");
+    const [age, setAge] = React.useState("");
+    const [birthDate, setbirthDate] = React.useState("");
+    const [area, setArea] = React.useState("");
+    const [province, setProvince] = React.useState("");
+    const [district, setDistrict] = React.useState("");
+    const [kidName, setkidName] = React.useState("");
     
     const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
@@ -32,7 +55,7 @@ export default function Page() {
       const fetchCourse = async () => {
         console.log("Fetching course from:", apiUrl); // Log the API URL
         try {
-          const response = await axios.get(`${apiUrl}/api/getCourseBabies/${id}`);
+          const response = await axios.get(`${apiUrl}/api/getCourseBabies/${courseId}`);
           console.log("Fetched courses data:", response.data); // Log the fetched data
           setCourse(response.data);
           setLoading(false);
@@ -44,7 +67,49 @@ export default function Page() {
       };
   
       fetchCourse();
-    }, [apiUrl, id]);
+    }, [apiUrl, courseId]);
+
+    const handleSubmit = async () => {
+      try {
+        // Get the User ID from the JWT token
+        const token = await AsyncStorage.getItem('userToken');
+        if (!token) {
+          Alert.alert("Error", "User is not authenticated.");
+          return;
+        }
+  
+        const decoded: any = jwtDecode(token);
+        const userName = decoded.userName; // Ensure this matches the structure of your JWT
+  
+        // Prepare the form data
+        const formData: FormData = {
+          userName: userName, 
+          courseTitle: course?.title|| '' , 
+          parent,
+          age,
+          birthDate,
+          province,
+          district,
+          area,
+          kidName,
+        };
+  
+            // Log formData to verify its structure
+            console.log("Form Data:", formData);
+  
+        // Send form data to the API
+        await axios.post(`${apiUrl}/api/registerRocketBabies`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        Alert.alert("Success", "User registered successfully");
+        router.push('/(tabs)/rocketStudent'); 
+      } catch (err) {
+        
+        console.error("Error submitting form:", err);
+        Alert.alert("Error", "Failed to submit the form.");
+      }
+    };
   
     if (loading) {
       return (
@@ -150,76 +215,92 @@ export default function Page() {
           </Text>
 
       
-    <TextInput
-     label="Nombre Completo"
-     value={text}
-     onChangeText={text => setText(text)}
-     mode="outlined"
-     style={{ width: 360, height: 50 }} 
-      />
-       <TextInput
-     label="Cédula"
-     value={text}
-     onChangeText={text => setText(text)}
-     mode="outlined"
-     style={{ width: 360, height: 50 }} 
-      />
-    
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-    <TextInput
-      label="Edad"
-      value={text}
-      onChangeText={text => setText(text)}
-      mode="outlined"
-      style={{ flex: 1, height: 50, marginRight: 10 }} // Add marginRight for spacing
-    />
-    <TextInput
-      label="Teléfono"
-      value={text}
-      onChangeText={text => setText(text)}
-      mode="outlined"
-      style={{ flex: 1, height: 50 }} // Flex for proportional sizing
-    />
-  </View>
-       <TextInput
-     label="Nacionalidad"
-     value={text}
-     onChangeText={text => setText(text)}
-     mode="outlined"
-     style={{ width: 360, height: 50 }} 
-      />
-       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-    <TextInput
-      label="Edad"
-      value={text}
-      onChangeText={text => setText(text)}
-      mode="outlined"
-      style={{ flex: 1, height: 50, marginRight: 10 }} // Add marginRight for spacing
-    />
-    <TextInput
-      label="Teléfono"
-      value={text}
-      onChangeText={text => setText(text)}
-      mode="outlined"
-      style={{ flex: 1, height: 50 }} // Flex for proportional sizing
-    />
-  </View>
-       <TextInput
-     label="Correo Electrónico"
-     value={text}
-     onChangeText={text => setText(text)}
-     mode="outlined"
-     style={{ width: 360, height: 50 }} 
-      />
-     <Link href="/" asChild>
-      <Button mode="contained" 
-         buttonColor="#6200ee"
-          style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }} 
-          labelStyle={{ fontSize: 16, lineHeight: 34 }} 
-        >  
-          Inscribirse
-          </Button>
-      </Link>  
+          <View>
+
+<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+<View style={{ flex: 1, marginRight: 10 }}>
+<Text style={{ marginBottom: 4 }}>Nombre del Padre/Madre/Encargado Legal</Text>
+<TextInput
+  value={parent}
+  onChangeText={text => setParent(text)}
+  mode="outlined"
+  style={{ height: 50 }} 
+/>
+</View>
+
+<View style={{ flex: 1 }}>
+<Text style={{ marginBottom: 4 }}>Fecha de Nacimiento</Text>
+<TextInput
+value={birthDate}
+onChangeText={text => setbirthDate(text)}
+mode="outlined"
+style={{  height: 50 }} 
+/>
+</View>
+
+</View>
+
+<View style={{ marginBottom: 16 }}>
+<Text style={{ marginBottom: 4 }}>Provincia</Text>
+<TextInput
+value={province}
+onChangeText={text => setProvince(text)}
+mode="outlined"
+style={{ width: 360, height: 50 }} 
+/>
+</View>
+
+<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+<View style={{ flex: 1, marginRight: 10 }}>
+<Text style={{ marginBottom: 4 }}>Cantón</Text>
+<TextInput
+  value={area}
+  onChangeText={text => setArea(text)}
+  mode="outlined"
+  style={{ height: 50 }} 
+/>
+</View>
+<View style={{ flex: 1 }}>
+<Text style={{ marginBottom: 4 }}>Distrito</Text>
+<TextInput
+  value={district}
+  onChangeText={text => setDistrict(text)}
+  mode="outlined"
+  style={{ height: 50 }} 
+/>
+</View>
+</View>
+<View style={{marginBottom: 16}}>
+<Text style={{ marginBottom: 4 }}>Edad</Text>
+<TextInput
+  value={age}
+  onChangeText={text => setAge(text)}
+  mode="outlined"
+  style={{ height: 50 }} 
+/>
+</View>
+<View style={{marginBottom: 16}}>
+<Text style={{ marginBottom: 4 }}>Nombre del Niño</Text>
+<TextInput
+  value={kidName}
+  onChangeText={text => setkidName(text)}
+  mode="outlined"
+  style={{ height: 50 }} 
+/>
+</View>
+
+
+<Button 
+mode="contained" 
+buttonColor="#6200ee"
+style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }} 
+labelStyle={{ fontSize: 16, lineHeight: 34 }} 
+onPress={handleSubmit}  
+>  
+Inscribirse
+</Button>
+</View>
+
     </View>
     </ScrollView>
   )
