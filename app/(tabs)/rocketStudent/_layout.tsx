@@ -32,6 +32,9 @@ export default function _layout() {
         <Stack.Screen name="[id]" options={{
             title: 'Post details'
         }} />
+           <Stack.Screen name="addCourse" options={{
+            title: 'Agregar Curso'
+        }} />
     </Stack>
   )
 }

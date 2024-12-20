@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { Button, Card, Text, Searchbar, FAB, IconButton, MD3Colors } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
 
 // Define the Course interface
@@ -20,6 +20,7 @@ interface Course {
   availability: boolean;
   inscriptionEndDate: string;
 }
+
 
 export default function RocketStudent() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -94,17 +95,19 @@ export default function RocketStudent() {
         />
       </View>
 
-      
+      {/*router.push('/(tabs)/rocketStudent');*/}
         {/* FAB placed like Searchbar */}
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 3, marginBottom: 15 }}>
+       
         <FAB
           icon="plus"
           label="Agregar Curso"
           style={{
             backgroundColor: '#6200ee',
           }}
-          onPress={() => console.log('FAB Pressed')}
+          onPress={() => router.push('/rocketStudent/addCourse')}
         />
+       
       </View>
 
       {/* Display filtered courses */}
