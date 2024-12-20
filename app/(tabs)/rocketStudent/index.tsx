@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Button, Card, Text, Searchbar, FAB, IconButton, MD3Colors } from 'react-native-paper';
 import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the Course interface
 interface Course {
@@ -21,9 +23,14 @@ interface Course {
   inscriptionEndDate: string;
 }
 
+interface User {
+  access: 'admin' | 'student';
+}
+
 
 export default function RocketStudent() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [user, setUser] = useState<User | null>(null); // State for user
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
@@ -31,6 +38,22 @@ export default function RocketStudent() {
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   useEffect(() => {
+
+    const fetchUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (token) {
+          const decoded: any = jwtDecode(token);
+          const userRole = decoded.userRole; 
+          setUser({ access: userRole }); // Set the user state
+        } else {
+          Alert.alert("Error", "User token not found. Please log in again.");
+        }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        setError('Failed to load user');
+      }
+    };
     const fetchCourses = async () => {
       console.log("Fetching courses from:", apiUrl); // Log the API URL
       try {
@@ -44,9 +67,11 @@ export default function RocketStudent() {
         setLoading(false);
       }
     };
-
+    fetchUser();
     fetchCourses();
   }, [apiUrl]);
+
+
 
   // Handle deleting a course
   const handleDeleteCourse = async (id: string) => {
@@ -97,6 +122,7 @@ export default function RocketStudent() {
 
       {/*router.push('/(tabs)/rocketStudent');*/}
         {/* FAB placed like Searchbar */}
+        {user?.access === 'admin' && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 3, marginBottom: 15 }}>
        
         <FAB
@@ -109,6 +135,7 @@ export default function RocketStudent() {
         />
        
       </View>
+        )}
 
       {/* Display filtered courses */}
       {filteredCourses.length > 0 ? (
