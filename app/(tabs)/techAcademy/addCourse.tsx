@@ -75,7 +75,7 @@ export default function AddCourse() {
             // Log formData to verify its structure
             console.log("Form Data:", formData);
   
-      await axios.post(`${apiUrl}/api/registerCourseStudents`, formData);
+      await axios.post(`${apiUrl}/api/registerCourse`, formData);
       Alert.alert("Success", "Course registered successfully");
       router.push("/(tabs)/rocketStudent");
     } catch (err) {
