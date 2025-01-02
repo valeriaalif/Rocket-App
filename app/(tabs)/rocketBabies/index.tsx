@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { Button, Card, Text, Searchbar, IconButton, MD3Colors, FAB } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the Course interface
 interface Course {
@@ -21,8 +23,13 @@ interface Course {
   inscriptionEndDate: string;
 }
 
+interface User {
+  access: 'admin' | 'student';
+}
+
 export default function RocketBabies() {
   const [courses, setCourses] = useState<Course[]>([]);
+   const [user, setUser] = useState<User | null>(null); // State for user
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
@@ -30,6 +37,21 @@ export default function RocketBabies() {
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (token) {
+          const decoded: any = jwtDecode(token);
+          const userRole = decoded.userRole; 
+          setUser({ access: userRole }); // Set the user state 
+        } else {
+          Alert.alert("Error", "User token not found. Please log in again.");
+        }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        setError('Failed to load user');
+      }
+    };
     const fetchCourses = async () => {
       console.log("Fetching courses from:", apiUrl); // Log the API URL
       try {
@@ -43,7 +65,7 @@ export default function RocketBabies() {
         setLoading(false);
       }
     };
-
+    fetchUser();
     fetchCourses();
   }, [apiUrl]);
 
@@ -92,16 +114,21 @@ export default function RocketBabies() {
       </View>
 
        {/* FAB placed like Searchbar */}
-       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 3, marginBottom: 15 }}>
-        <FAB
-          icon="plus"
-          label="Agregar Curso"
-          style={{
-            backgroundColor: '#6200ee',
-          }}
-          onPress={() => console.log('FAB Pressed')}
-        />
-      </View>
+        {user?.access === 'admin' && (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 3, marginBottom: 15 }}>
+             
+              <FAB
+                icon="plus"
+                label="Agregar Curso"
+                style={{
+                  backgroundColor: '#6200ee',
+                }}
+                onPress={() => router.push('/rocketBabies/addCourse')}
+              />
+             
+            </View>
+              )}
+      
 
       {/* Display filtered courses */}
       {filteredCourses.length > 0 ? (

@@ -45,7 +45,7 @@ export default function RocketStudent() {
         if (token) {
           const decoded: any = jwtDecode(token);
           const userRole = decoded.userRole; 
-          setUser({ access: userRole }); // Set the user state
+          setUser({ access: userRole }); // Set the user state 
         } else {
           Alert.alert("Error", "User token not found. Please log in again.");
         }
@@ -163,7 +163,7 @@ export default function RocketStudent() {
       icon="pencil"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => console.log('Edit pressed')}
+      onPress={() => router.push(`/rocketStudent/editCourse?id=${course.id}`)}
     />
     <IconButton
       icon="delete"
