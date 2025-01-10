@@ -83,6 +83,24 @@ export default function TechAcademy() {
     }
   };
 
+  const confirmDeleteCourse = (courseId: string) => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to delete this course? This action cannot be undone.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes, Delete",
+            style: "destructive",
+            onPress: () => handleDeleteCourse(courseId),
+          },
+        ]
+      );
+    };
+
   // Filter courses based on the search query
   const filteredCourses = courses.filter(course => 
     course.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -151,20 +169,22 @@ export default function TechAcademy() {
               <Text variant="bodyMedium">Disponibilidad: {course.availability}</Text>
             </Card.Content>
             <Card.Actions>
+            {user?.access === 'admin' && ( 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     <IconButton
       icon="pencil"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => console.log('Edit pressed')}
+      onPress={() => router.push(`/techAcademy/editCourse?id=${course.id}`)}
     />
   <IconButton
       icon="delete"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => handleDeleteCourse(course.id)}
+      onPress={() => confirmDeleteCourse(course.id)}
     />
   </View>
+            )}
               <Link href={`/techAcademy/${course.id}`} asChild>
                 <Button 
                   mode="contained" 

@@ -71,6 +71,7 @@ export default function RocketStudent() {
     fetchCourses();
   }, [apiUrl]);
 
+  
 
 
   // Handle deleting a course
@@ -83,6 +84,24 @@ export default function RocketStudent() {
       console.error("Error deleting course:", error);
       Alert.alert("Error", "Failed to delete course");
     }
+  };
+
+  const confirmDeleteCourse = (courseId: string) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this course? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes, Delete",
+          style: "destructive",
+          onPress: () => handleDeleteCourse(courseId),
+        },
+      ]
+    );
   };
 
   // Filter courses based on the search query
@@ -157,6 +176,7 @@ export default function RocketStudent() {
               <Text variant="bodyMedium">Disponibilidad: {course.availability}</Text>
             </Card.Content>
             <Card.Actions>
+            {user?.access === 'admin' && (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     
     <IconButton
@@ -169,9 +189,11 @@ export default function RocketStudent() {
       icon="delete"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => handleDeleteCourse(course.id)}
+      onPress={() => confirmDeleteCourse(course.id)}
     />
+    
   </View>
+            )}
               <Link href={`/rocketStudent/${course.id}`} asChild>
                 <Button 
                   mode="contained" 

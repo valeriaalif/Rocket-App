@@ -50,7 +50,7 @@ export default function _layout() {
           headerShown: false,
         }}
       />
-   
+         
     </Tabs>
   );
 }

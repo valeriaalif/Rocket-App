@@ -69,6 +69,24 @@ export default function RocketBabies() {
     fetchCourses();
   }, [apiUrl]);
 
+  const confirmDeleteCourse = (courseId: string) => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to delete this course? This action cannot be undone.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes, Delete",
+            style: "destructive",
+            onPress: () => handleDeleteCourse(courseId),
+          },
+        ]
+      );
+    };
+
   // Handle deleting a course
   const handleDeleteCourse = async (id: string) => {
     try {
@@ -150,20 +168,22 @@ export default function RocketBabies() {
               <Text variant="bodyMedium">Disponibilidad: {course.availability }</Text>
             </Card.Content>
             <Card.Actions>
+            {user?.access === 'admin' && (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     <IconButton
       icon="pencil"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => console.log('Edit pressed')}
+      onPress={() => router.push(`/rocketBabies/editCourse?id=${course.id}`)}
     />
    <IconButton
       icon="delete"
       iconColor={MD3Colors.error50}
       size={20}
-      onPress={() => handleDeleteCourse(course.id)}
+      onPress={() => confirmDeleteCourse(course.id)}
     />
   </View>
+            )}
               <Link href={`/rocketBabies/${course.id}`} asChild>
                 <Button 
                   mode="contained" 
