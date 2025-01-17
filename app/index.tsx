@@ -97,7 +97,7 @@ export default function Page() {
           style={{ width: 300, height: 50, marginBottom: 10 }}
         />
 
-        <Link href="/one" style={{ marginBottom: 10 }}>
+        <Link href="/forgot-pwd" style={{ marginBottom: 10 }}>
           <Text style={{ color: 'grey', fontWeight: 'bold' }}>
             ¿Olvidaste tu Contraseña?
           </Text>

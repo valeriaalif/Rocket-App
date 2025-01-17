@@ -1,94 +1,89 @@
-import { Button } from "@rneui/themed";
-import { router } from "expo-router";
-import { View, TextInput, StyleSheet, Alert } from "react-native";
+import { router, Link } from "expo-router";
+import { ScrollView, View, StyleSheet, Alert } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import axios from 'axios';
-import Constants from 'expo-constants';
+import { TextInput, Text, Button } from "react-native-paper";
+import { auth , sendPasswordResetEmail} from '../firebaseConfig';
+
 
 export default function ForgotPassword() {
-  const { colors } = useTheme();
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const apiUrl = Constants.expoConfig?.extra?.API_URL;
+ 
+  const [email, setEmail] = useState("");
+
+  
+
   const handleForgotPassword = async () => {
-    if (!enteredEmail) {
-      Alert.alert("Error", "Please enter a valid email address.");
-      return;
-    }
-  
     try {
-      const response = await axios.post(`${apiUrl}/api/forgotPwd`, 
-        { 
-          enteredEmail // Sends the email as-is
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true', // Skip browser warning
-          },
-        }
-      );
-  
-      // Check for successful response
-      if (response.status === 200) {
-        Alert.alert("Success", response.data.message);
-      } else {
-        Alert.alert("Error", response.data.message || "An error occurred. Please try again.");
+      if (!email) {
+        console.error("Email is required");
+        return;
       }
-    } catch (error) {
-      console.error("Error sending password reset email:", error);
-    }
-  };
-  
+  await sendPasswordResetEmail(auth, email);
+  Alert.alert('Success', 'Password reset email sent. Please check your inbox.');
+} catch (error) {
+  console.error("Error sending password reset email:", error);
+}
+}
+
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
-    
-        <View className="flex-1 flex-col px-7 mt-44">
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.container}>
+          <Text style={styles.introText}>Ingrese su correo electrónico y le mandaremos un enlace para reestablecer su contraseña.</Text>
           <TextInput
+            label="Correo Electrónico"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            mode="outlined"
             style={styles.input}
-            autoCapitalize="none"
-            autoCorrect
-            keyboardType="email-address"
-            onChangeText={setEnteredEmail}
-            value={enteredEmail}
-            // autoFocus
-            blurOnSubmit
-            placeholder="Enter email address"
           />
           <Button
-            loading={false}
-            disabled={false}
-            type="solid"
-            title="Submit"
-            color={colors.primary}
+            mode="contained"
+            buttonColor="#6200ee"
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
             onPress={handleForgotPassword}
-            size="lg"
-            radius="md"
-          />
-          <Button
-            type="clear"
-            title="Back to login"
-            titleStyle={{ color: colors.primary }}
-            onPress={() => {
-              router.push("/sign-in");
-            }}
-          />
+          >
+            Reestablecer Contraseña
+          </Button>
         </View>
-    
+      </ScrollView>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  container: {
+    width: "90%",
+    alignItems: "center",
+  },
   input: {
-    width: '100%',
-    fontFamily: "Exo_400Regular",
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    borderRadius: 8,
-    borderWidth: 2,
+    width: "100%",
+    marginBottom: 16,
+  },
+  button: {
+    width: "100%",
+    paddingVertical: 12,
+    marginBottom: 16,
+  },
+  buttonLabel: {
     fontSize: 16,
-    flex: 1,
-    marginBottom: 12,
+  },
+  link: {
+    marginTop: 10,
+  },
+  introText: {
+    width: "100%", // Matches the width of the TextInput
+    textAlign: "left", // Aligns the text to the left
+    marginBottom: 10,
+    fontSize: 16,
+    color: "#333", // Optional: Slightly darker text for better readability
   },
 });

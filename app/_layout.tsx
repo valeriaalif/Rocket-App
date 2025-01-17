@@ -36,6 +36,8 @@ export default function _layout() {
         <Stack.Screen name="[missing]" options={{
             title: '404'
         }} />
+
+      
        
    </Stack>
   )
