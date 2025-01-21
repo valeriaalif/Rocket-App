@@ -178,12 +178,7 @@ export default function Page() {
           />
         </View>
 
-        <IconButton
-      icon="pencil"
-      iconColor={MD3Colors.error50}
-      size={20}
-      onPress={() => console.log('Edit pressed')}
-    />
+     
 
         {/* Display the course details */}
         <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 }}>

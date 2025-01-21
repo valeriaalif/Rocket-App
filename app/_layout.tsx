@@ -20,7 +20,7 @@ export default function _layout() {
             headerShown: false
         }} />
         <Stack.Screen name="register/index" options={{
-            title: 'Register',
+            title: 'Registrar Cuenta',
             headerRight: ()=>(
                 <Button title="Login" onPress={()=> router.push('/login')} />
             ),
@@ -35,6 +35,11 @@ export default function _layout() {
         }} />
         <Stack.Screen name="[missing]" options={{
             title: '404'
+        }} />
+
+        <Stack.Screen name="forgot-pwd" options={{
+            title: 'Recuperar Cuenta',
+            headerShown: true
         }} />
 
       

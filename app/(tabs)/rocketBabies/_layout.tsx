@@ -13,15 +13,13 @@ export default function _layout() {
              headerRight: ()=>(
                            // Button to trigger logout
                        
-                <Button 
-                  mode="contained" 
-                  buttonColor="#6200ee"
-                  style={{ paddingHorizontal: 2, height: 56 }} 
-                  labelStyle={{ fontSize: 16, lineHeight: 34 }}
-                  onPress={() => router.push('/rocketBabies/profile')}
-                >
-                  Inscribirse
-                </Button>
+                           <IconButton
+                           icon="rocket" // Replace "rocket" with the desired icon name from Material Community Icons
+                           size={24} // Adjust the size of the icon
+                           iconColor="#6200ee" // Change the icon color
+                           style={{ height: 56, width: 56, justifyContent: "center", alignItems: "center" }}
+                           onPress={() => router.push('/rocketBabies/profile')}
+                         />
            
                       ),
         }} />
