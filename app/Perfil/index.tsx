@@ -5,7 +5,7 @@ import Constants from "expo-constants";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
-import { Link, router } from "expo-router";
+import { useRouter } from "expo-router"; // Corrected import
 
 interface UserInfo {
   name: string;
@@ -20,6 +20,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserInfo | null>(null);
+  const router = useRouter(); // Initialize router
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   useEffect(() => {
@@ -52,6 +53,22 @@ export default function Profile() {
 
     fetchUser();
   }, [apiUrl]);
+
+  // Logout function
+     const handleLogout = async () => {
+      try {
+        // Remove token from AsyncStorage
+        await AsyncStorage.removeItem('userToken');
+  
+        // Optionally show a confirmation alert
+        Alert.alert('Logged Out', 'You have been logged out successfully.');
+  
+        // Redirect user to login screen
+        router.push('/');  // Adjust path as per your app's login route
+      } catch (error) {
+        Alert.alert('Error', 'Something went wrong while logging out.');
+      }
+    };
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -96,7 +113,28 @@ export default function Profile() {
                   labelStyle={{ fontSize: 16, lineHeight: 34 }}
                   onPress={() => router.push(`/forgot-pwd`)}
                 >
-                  Inscribirse
+                  Cambiar Contraseña
+                </Button>
+
+                <Button 
+                  mode="contained" 
+                  buttonColor="#6200ee"
+                  style={{ paddingHorizontal: 2, height: 56 }} 
+                  labelStyle={{ fontSize: 16, lineHeight: 34 }}
+                  onPress={() => router.push(`/Perfil/editProfile` )}
+                >
+                  Edita Perfil
+                </Button>
+
+                
+                <Button 
+                  mode="contained" 
+                  buttonColor="#6200ee"
+                  style={{ paddingHorizontal: 2, height: 56 }} 
+                  labelStyle={{ fontSize: 16, lineHeight: 34 }}
+                  onPress={ handleLogout}
+                >
+                  Cerrar Sesión
                 </Button>
       </View>
     </ScrollView>

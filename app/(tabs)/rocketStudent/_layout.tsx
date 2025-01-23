@@ -1,40 +1,85 @@
-import { View, Text, Button, Alert } from 'react-native'
-import React from 'react'
-import { Stack, useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IconButton } from 'react-native-paper';
+import {jwtDecode} from 'jwt-decode';
+import AdminDrawer from '../../../components/AdminDrawer';
+
+interface User {
+  access: 'admin' | 'student';
+}
 
 export default function _layout() {
   const router = useRouter();
-   // Logout function
-   const handleLogout = async () => {
-    try {
-      // Remove token from AsyncStorage
-      await AsyncStorage.removeItem('userToken');
+  const [isDrawerVisible, setDrawerVisible] = useState(false);
+  const toggleDrawer = () => setDrawerVisible(!isDrawerVisible);
+  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-      // Optionally show a confirmation alert
-      Alert.alert('Logged Out', 'You have been logged out successfully.');
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (token) {
+          const decoded: any = jwtDecode(token);
+          const userRole = decoded.userRole;
+          setUser({ access: userRole }); // Set the user state
+        } else {
+          Alert.alert('Error', 'User token not found. Please log in again.');
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        setError('Failed to load user');
+      }
+    };
 
-      // Redirect user to login screen
-      router.push('/');  // Adjust path as per your app's login route
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong while logging out.');
-    }
-  };
+    fetchUser();
+  }, []);
+
   return (
+    <>
+      {/* Admin Drawer */}
+          <AdminDrawer
+            isVisible={isDrawerVisible}
+            onClose={toggleDrawer}
+          />
+      
     <Stack>
-        <Stack.Screen name="index" options={{
-            title: 'RocketStudent',
-            headerRight: ()=>(
-               // Button to trigger logout
-            <Button title="Logout" onPress={handleLogout} />
-          ),
-        }} />
-        <Stack.Screen name="[id]" options={{
-            title: 'Post details'
-        }} />
-           <Stack.Screen name="addCourse" options={{
-            title: 'Agregar Curso'
-        }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'RocketStudent',
+          headerRight: () =>
+            user?.access === 'admin' && (
+              <IconButton
+                icon="menu" // Replace with the desired icon name
+                size={24}
+                iconColor="#6200ee"
+                style={{
+                  height: 56,
+                  width: 56,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={toggleDrawer}
+              />
+            ),
+        }}
+      />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: 'Post details',
+        }}
+      />
+      <Stack.Screen
+        name="addCourse"
+        options={{
+          title: 'Agregar Curso',
+        }}
+      />
     </Stack>
-  )
+    </>
+  );
 }

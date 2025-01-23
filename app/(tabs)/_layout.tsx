@@ -6,12 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode'; // Corrected import statement
 import 'core-js/stable/atob'; // Polyfill for 'atob'
 
-interface DecodedToken {
-  Id: string;
-  userRole: string;
-  userName: string;
-  userEmail: string;
-}
 
 export default function _layout() {
  

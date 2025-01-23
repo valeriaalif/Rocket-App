@@ -6,6 +6,7 @@ import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
+import AdminDrawer from '../../../components/AdminDrawer';
 
 // Define the Course interface
 interface Course {
@@ -34,6 +35,7 @@ export default function RocketStudent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
+  const [isDrawerVisible, setDrawerVisible] = useState(false);
   
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
@@ -125,7 +127,10 @@ export default function RocketStudent() {
     );
   }
 
+  
   return (
+   <>
+
     
     <ScrollView contentContainerStyle={{ padding: 16 }}>
 
@@ -138,6 +143,7 @@ export default function RocketStudent() {
           value={searchQuery}
         />
       </View>
+
 
       {/*router.push('/(tabs)/rocketStudent');*/}
         {/* FAB placed like Searchbar */}
@@ -214,6 +220,6 @@ export default function RocketStudent() {
       )}
 
     </ScrollView>
-  
+    </>
   );
 }

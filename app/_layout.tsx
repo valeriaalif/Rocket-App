@@ -5,7 +5,7 @@ import { Stack, useRouter } from 'expo-router'
 export default function _layout() {
 
     
-    const router = useRouter();
+const router = useRouter();
   return (
    <Stack
     screenOptions={{
@@ -42,7 +42,10 @@ export default function _layout() {
             headerShown: true
         }} />
 
-      
+        <Stack.Screen name="auth/editProfile" options={{
+            title: 'Editar Perfil',
+           
+        }} />
        
    </Stack>
   )

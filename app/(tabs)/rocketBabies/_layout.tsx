@@ -14,11 +14,11 @@ export default function _layout() {
                            // Button to trigger logout
                        
                            <IconButton
-                           icon="rocket" // Replace "rocket" with the desired icon name from Material Community Icons
+                           icon="user" // Replace "rocket" with the desired icon name from Material Community Icons
                            size={24} // Adjust the size of the icon
                            iconColor="#6200ee" // Change the icon color
                            style={{ height: 56, width: 56, justifyContent: "center", alignItems: "center" }}
-                           onPress={() => router.push('/rocketBabies/profile')}
+                           onPress={() => router.push('/Perfil')}
                          />
            
                       ),
@@ -28,9 +28,6 @@ export default function _layout() {
         }} />
            <Stack.Screen name="addCourse" options={{
                     title: 'Agregar Curso'
-        }} />
-        <Stack.Screen name="profile" options={{
-                    title: 'Perfil'
         }} />
         
     </Stack>
