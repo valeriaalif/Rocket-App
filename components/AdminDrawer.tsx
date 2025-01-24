@@ -65,23 +65,23 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
             icon="plus"
             onPress={() => {
               onClose();
-              router.push('/addCourse'); // Update route as needed
+              router.push('/Admin'); // Update route as needed
             }}
           />
           <Drawer.Item
-            label="Estadísticas"
-            icon="chart-bar"
+            label="Ver Perfil"
+            icon="plus"
             onPress={() => {
               onClose();
-              router.push('/stats'); // Update route as needed
+              router.push('/Perfil/'); // Update route as needed
             }}
           />
           <Drawer.Item
-            label="Configuración"
-            icon="cog"
+            label="Agregar Curso Rocket Babies"
+            icon="plus"
             onPress={() => {
               onClose();
-              router.push('/settings'); // Update route as needed
+              router.push('/'); // Update route as needed
             }}
           />
         </Drawer.Section>

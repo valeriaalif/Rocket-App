@@ -102,6 +102,7 @@ export default function editCourse(){
               label="Title"
               value={editableCourse.title}
               onChangeText={(text) => handleFieldChange('title', text)}
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
@@ -109,12 +110,14 @@ export default function editCourse(){
               value={editableCourse.teacher}
               onChangeText={(text) => handleFieldChange('teacher', text)}
               style={{ marginBottom: 10 }}
+              mode="outlined"
             />
             <TextInput
               label="Audience"
               value={editableCourse.audience}
               onChangeText={(text) => handleFieldChange('audience', text)}
               multiline
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
@@ -122,6 +125,7 @@ export default function editCourse(){
               value={editableCourse.benefits}
               onChangeText={(text) => handleFieldChange('benefits', text)}
               multiline
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
@@ -129,6 +133,7 @@ export default function editCourse(){
               value={editableCourse.requirements}
               onChangeText={(text) => handleFieldChange('requirements', text)}
               multiline
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
@@ -136,6 +141,7 @@ export default function editCourse(){
               value={editableCourse.description}
               onChangeText={(text) => handleFieldChange('description', text)}
               multiline
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
@@ -143,18 +149,26 @@ export default function editCourse(){
               value={editableCourse.content}
               onChangeText={(text) => handleFieldChange('content', text)}
               multiline
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
             <TextInput
               label="Send Email Date"
               value={editableCourse.sendEmailDate}
               onChangeText={(text) => handleFieldChange('sendEmailDate', text)}
+              mode="outlined"
               style={{ marginBottom: 10 }}
             />
 
-            <Button mode="contained" onPress={handleSubmit} style={{ marginTop: 20 }}>
-              Save Changes
-            </Button>
+         
+                   <Button mode="contained"
+                     buttonColor="#6200ee"
+                     style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+                     labelStyle={{ fontSize: 16, lineHeight: 34 }}
+                     onPress={handleSubmit}  
+                   >
+                     Editar Curso
+                   </Button>
           </>
         )}
       </View>

@@ -160,9 +160,15 @@ export default function editCourse(){
               style={{ marginBottom: 10 }}
             />
 
-            <Button mode="contained" onPress={handleSubmit} style={{ marginTop: 20 }}>
-              Save Changes
-            </Button>
+          
+                    <Button mode="contained"
+                      buttonColor="#6200ee"
+                      style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+                      labelStyle={{ fontSize: 16, lineHeight: 34 }}
+                      onPress={handleSubmit}  
+                    >
+                      Editar Curso
+                    </Button>
           </>
         )}
       </View>
