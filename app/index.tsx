@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import { TextInput, Text, Button } from 'react-native-paper';
-import axios from 'axios'; 
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
 
@@ -22,32 +22,28 @@ export default function Page() {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true', // Skip the browser warning
+          'ngrok-skip-browser-warning': 'true',
         },
       });
-      
+
 
       const { token } = response.data;
 
-      // Store the token in AsyncStorage
+
       await AsyncStorage.setItem('userToken', token);
 
-       // Clear input fields after successful login
-       setEmail('');
-       setPassword('');
 
-      // Handle successful login, e.g., show a success message
-      Alert.alert('Login Successful!', 'You have successfully logged in.');
+      setEmail('');
+      setPassword('');
 
-      // You can navigate the user to another screen if needed
-      router.push('/(tabs)/rocketStudent'); 
+      router.push('/(tabs)/rocketStudent');
 
     } catch (error: any) {
-      console.error('Error during login:', error.message); // Log error message
+      console.error('Error during login:', error.message);
       if (axios.isAxiosError(error)) {
-        console.error('Axios Error:', error.toJSON()); // Log Axios error details
+        console.error('Axios Error:', error.toJSON());
         if (error.response) {
-          // Server responded with a status other than 200
+
           Alert.alert('Login Failed', error.response.data.error || 'No error message provided');
         } else {
           Alert.alert('Error', 'Request did not reach server. Please check your API URL.');
@@ -56,7 +52,7 @@ export default function Page() {
         Alert.alert('Error', 'Something went wrong.');
       }
     }
-    
+
   };
 
   return (
@@ -103,13 +99,13 @@ export default function Page() {
           </Text>
         </Link>
 
-        {/* Call handleLogin on button press */}
+
         <Button
           mode="contained"
           buttonColor="#6200ee"
           style={{ paddingHorizontal: 72, height: 56 }}
           labelStyle={{ fontSize: 16, lineHeight: 34 }}
-          onPress={handleLogin} // Trigger login on button press
+          onPress={handleLogin}
         >
           Inicia Sesión
         </Button>

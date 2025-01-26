@@ -1,29 +1,27 @@
 import { Stack } from "expo-router";
 
-export default function ProfileLayout() {
+export default function AdminLayout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: "#6200ee" },
-        headerTintColor: "#fff",
-        headerTitleStyle: { fontWeight: "bold" },
+      
       }}
     >
       <Stack.Screen 
         name="index" 
-        options={{ title: "Admin", headerShown: false }} 
+        options={{ title: "Admin", headerShown: true }} 
       />
       <Stack.Screen 
         name="addTechAcademy" 
-        options={{ title: "Agregar Curso", headerShown: false }} 
+        options={{ title: "Tech Academy", headerShown: true }} 
       />
        <Stack.Screen 
         name="addRocketStudent" 
-        options={{ title: "Agregar Cursol", headerShown: true }} 
+        options={{ title: "Rocket Sudent", headerShown: true }} 
       />
        <Stack.Screen 
         name="addRocketBabies" 
-        options={{ title: "Agregar Curso", headerShown: true }} 
+        options={{ title: "Rocket Babies", headerShown: true }} 
       />
     </Stack>
   );

@@ -18,18 +18,18 @@ interface AdminDrawerProps {
 
 export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
   const router = useRouter();
-  const translateX = useRef(new Animated.Value(Dimensions.get('window').width)).current; // Start off-screen
+  const translateX = useRef(new Animated.Value(Dimensions.get('window').width)).current; 
 
   useEffect(() => {
     if (isVisible) {
-      // Slide in when visible
+   
       Animated.timing(translateX, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
-      // Slide out when not visible
+     
       Animated.timing(translateX, {
         toValue: Dimensions.get('window').width,
         duration: 300,
@@ -39,7 +39,7 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
   }, [isVisible, translateX]);
 
   if (!isVisible) {
-    return null; // Don't render the drawer if not visible
+    return null; 
   }
 
   return (
@@ -48,12 +48,12 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
       <Animated.View
-        style={[styles.drawerContainer, { transform: [{ translateX }] }]} // Apply sliding animation
+        style={[styles.drawerContainer, { transform: [{ translateX }] }]} 
       >
-        {/* Image and Text at the top of the drawer */}
+        
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/images/registerpic.png')} // Replace with your image URL or local asset
+            source={require('../assets/images/registerpic.png')} 
             style={styles.logoImage}
           />
           <Text style={styles.logoText}>Rocket Admin</Text>
@@ -65,7 +65,7 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
             icon="plus"
             onPress={() => {
               onClose();
-              router.push('/Admin'); // Update route as needed
+              router.push('/Admin'); 
             }}
           />
           <Drawer.Item
@@ -73,15 +73,7 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
             icon="plus"
             onPress={() => {
               onClose();
-              router.push('/Perfil/'); // Update route as needed
-            }}
-          />
-          <Drawer.Item
-            label="Agregar Curso Rocket Babies"
-            icon="plus"
-            onPress={() => {
-              onClose();
-              router.push('/'); // Update route as needed
+              router.push('/Perfil/');
             }}
           />
         </Drawer.Section>
@@ -93,20 +85,20 @@ export default function AdminDrawer({ isVisible, onClose }: AdminDrawerProps) {
 const styles = StyleSheet.create({
   overlayContainer: {
     flex: 1,
-    position: 'absolute', // Ensures it's positioned above all other components
+    position: 'absolute', 
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1000, // High zIndex ensures it's on top of other components
+    zIndex: 1000, 
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
   drawerContainer: {
     position: 'absolute',
-    right: 0, // Align drawer to the right
+    right: 0, 
     top: 0,
     bottom: 0,
     width: '80%',
@@ -115,16 +107,16 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    paddingVertical: 20, // Adjust vertical padding for spacing around logo
-    borderBottomWidth: 1, // Optional border between logo and drawer items
+    paddingVertical: 20, 
+    borderBottomWidth: 1, 
     borderBottomColor: '#ddd',
-    marginTop: 60, // Add marginTop to push the logo container down
+    marginTop: 60, 
   },
   logoImage: {
-    width: 60, // Adjust size as needed
-    height: 60, // Adjust size as needed
-    marginBottom: 10, // Space between the logo and the text
-    borderRadius: 30, // Make the logo round, optional
+    width: 60, 
+    height: 60, 
+    marginBottom: 10, 
+    borderRadius: 30, 
   },
   logoText: {
     fontSize: 18,
@@ -132,6 +124,6 @@ const styles = StyleSheet.create({
     color: '#6200ee',
   },
   drawerSection: {
-    marginTop: 20, // Adjust this value as needed to move the items lower
+    marginTop: 20, 
   },
 });

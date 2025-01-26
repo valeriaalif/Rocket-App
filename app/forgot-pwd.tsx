@@ -1,6 +1,5 @@
 import { router, Link } from "expo-router";
 import { ScrollView, View, StyleSheet, Alert } from "react-native";
-import { useTheme } from "@react-navigation/native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Text, Button } from "react-native-paper";
@@ -80,10 +79,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   introText: {
-    width: "100%", // Matches the width of the TextInput
-    textAlign: "left", // Aligns the text to the left
+    width: "100%", 
+    textAlign: "left", 
     marginBottom: 10,
     fontSize: 16,
-    color: "#333", // Optional: Slightly darker text for better readability
+    color: "#333", 
   },
 });

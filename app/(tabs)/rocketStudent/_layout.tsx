@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IconButton } from 'react-native-paper';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import AdminDrawer from '../../../components/AdminDrawer';
 
 interface User {
@@ -24,7 +24,7 @@ export default function _layout() {
         if (token) {
           const decoded: any = jwtDecode(token);
           const userRole = decoded.userRole;
-          setUser({ access: userRole }); // Set the user state
+          setUser({ access: userRole });
         } else {
           Alert.alert('Error', 'User token not found. Please log in again.');
         }
@@ -39,47 +39,42 @@ export default function _layout() {
 
   return (
     <>
-      {/* Admin Drawer */}
-          <AdminDrawer
-            isVisible={isDrawerVisible}
-            onClose={toggleDrawer}
-          />
-      
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          title: 'RocketStudent',
-          headerRight: () =>
-            user?.access === 'admin' && (
-              <IconButton
-                icon="menu" // Replace with the desired icon name
-                size={24}
-                iconColor="#6200ee"
-                style={{
-                  height: 56,
-                  width: 56,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={toggleDrawer}
-              />
-            ),
-        }}
+
+      <AdminDrawer
+        isVisible={isDrawerVisible}
+        onClose={toggleDrawer}
       />
-      <Stack.Screen
-        name="[id]"
-        options={{
-          title: 'Post details',
-        }}
-      />
-      <Stack.Screen
-        name="addCourse"
-        options={{
-          title: 'Agregar Curso',
-        }}
-      />
-    </Stack>
+
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            title: 'RocketStudent',
+            headerRight: () =>
+              user?.access === 'admin' && (
+                <IconButton
+                  icon="menu"
+                  size={24}
+                  iconColor="#6200ee"
+                  style={{
+                    height: 56,
+                    width: 56,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={toggleDrawer}
+                />
+              ),
+          }}
+        />
+        <Stack.Screen
+          name="[id]"
+          options={{
+            title: 'Post details',
+          }}
+        />
+
+      </Stack>
     </>
   );
 }

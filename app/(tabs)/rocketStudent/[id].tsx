@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { View, ScrollView, Image, Alert } from 'react-native';
 import axios from 'axios';
-import { Button, Card, Text, TextInput, FAB, IconButton,MD3Colors } from 'react-native-paper';
-import { Link, router } from 'expo-router';
+import { Button, Text, TextInput } from 'react-native-paper';
+import { router } from 'expo-router';
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-// Define the CourseInfo interface
+
 interface CourseInfo {
   id: string;
   title: string;
@@ -28,7 +28,7 @@ interface FormData {
   courseTitle: string;
   age: string;
   academicDegree: string;
-  area: string; // or string if you prefer
+  area: string;
   province: string;
   district: string;
   student: string;
@@ -65,14 +65,13 @@ export default function Page() {
 
   useEffect(() => {
     const fetchCourse = async () => {
-      console.log("Fetching course from:", apiUrl); // Log the API URL
       try {
         const response = await axios.get(`${apiUrl}/api/getCourseStudents/${id}`);
-        console.log("Fetched courses data:", response.data); // Log the fetched data
+
         setCourse(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching course:", err); // Log any error
+        console.error("Error fetching course:", err);
         setError('Failed to load course');
         setLoading(false);
       }
@@ -81,10 +80,10 @@ export default function Page() {
     fetchCourse();
   }, [apiUrl, id]);
 
-  
+
   const handleSubmit = async () => {
     try {
-      // Get the User ID from the JWT token
+
       const token = await AsyncStorage.getItem('userToken');
       if (!token) {
         Alert.alert("Error", "User is not authenticated.");
@@ -92,12 +91,11 @@ export default function Page() {
       }
 
       const decoded: any = jwtDecode(token);
-      const userName = decoded.userName; // Ensure this matches the structure of your JWT
+      const userName = decoded.userName;
 
-      // Prepare the form data
       const formData: FormData = {
-        userName: userName, 
-        courseTitle: course?.title|| '' , 
+        userName: userName,
+        courseTitle: course?.title || '',
         academicDegree: education,
         age,
         student,
@@ -107,18 +105,16 @@ export default function Page() {
         organization,
       };
 
-          // Log formData to verify its structure
-          console.log("Form Data:", formData);
 
-      // Send form data to the API
+
       await axios.post(`${apiUrl}/api/registerRocketStudent`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      Alert.alert("Success", "User registered successfully");
-      router.push('/(tabs)/rocketStudent'); 
+      Alert.alert("Curso Registrado", "Se ha inscrito al curso.");
+      router.push('/(tabs)/rocketStudent');
     } catch (err) {
-      
+
       console.error("Error submitting form:", err);
       Alert.alert("Error", "Failed to submit the form.");
     }
@@ -141,11 +137,10 @@ export default function Page() {
     );
   }
 
-  
 
-  // Function to split description into 3 parts
+
   const splitDescription = (description: string) => {
-    const paragraphLength = Math.ceil(description.length / 3); // Calculate length for each part
+    const paragraphLength = Math.ceil(description.length / 3);
     return [
       description.slice(0, paragraphLength),
       description.slice(paragraphLength, 2 * paragraphLength),
@@ -154,7 +149,7 @@ export default function Page() {
   };
 
   const splitContent = (content: string) => {
-    const paragraphLength = Math.ceil(content.length / 3); // Calculate length for each part
+    const paragraphLength = Math.ceil(content.length / 3);
     return [
       content.slice(0, paragraphLength),
       content.slice(paragraphLength, 2 * paragraphLength),
@@ -178,9 +173,8 @@ export default function Page() {
           />
         </View>
 
-     
 
-        {/* Display the course details */}
+
         <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 }}>
           {course?.title}
         </Text>
@@ -199,12 +193,13 @@ export default function Page() {
           Requerimientos
         </Text>
         <Text style={{ textAlign: 'left', marginBottom: 10 }}> {course?.requirements}</Text>
-        {/* Title for the description */}
+
+
         <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'left', marginBottom: 10 }}>
           Descripción
         </Text>
 
-        {/* Display the description split into 3 paragraphs */}
+
         {course?.description &&
           splitDescription(course.description).map((paragraph, index) => (
             <Text key={index} style={{ textAlign: 'left', marginBottom: 10 }}>
@@ -232,98 +227,98 @@ export default function Page() {
           Formulario de Inscripción
         </Text>
       </View>
-   
-
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 4 }}>Último Grado Académico Aprobado</Text>
-          <DropDownPicker
-            open={openEducation}
-            value={education}
-            items={itemsEducation}
-            setOpen={setOpenEducation}
-            setValue={setEducation}
-            setItems={setItemsEducation}
-            listMode="SCROLLVIEW"
-            placeholder="Selecciona el grado académico"
-            style={{ width: 360, height: 50 }}
-          />
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-          <View style={{ flex: 1, marginRight: 10 }}>
-            <Text style={{ marginBottom: 4 }}>¿Eres un estudiante activo? (Sí/No)</Text>
-            <TextInput
-              value={student}
-              onChangeText={text => setStudent(text)}
-              mode="outlined"
-              style={{ height: 50 }}
-            />
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <Text style={{ marginBottom: 4 }}>Edad</Text>
-            <TextInput
-              value={age}
-              onChangeText={text => setAge(text)}
-              mode="outlined"
-              style={{ height: 50 }}
-            />
-          </View>
-
-        </View>
 
 
+      <View style={{ marginBottom: 16 }}>
+        <Text style={{ marginBottom: 4 }}>Último Grado Académico Aprobado</Text>
+        <DropDownPicker
+          open={openEducation}
+          value={education}
+          items={itemsEducation}
+          setOpen={setOpenEducation}
+          setValue={setEducation}
+          setItems={setItemsEducation}
+          listMode="SCROLLVIEW"
+          placeholder="Selecciona el grado académico"
+          style={{ width: 360, height: 50 }}
+        />
+      </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 4 }}>Provincia</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={{ marginBottom: 4 }}>¿Eres un estudiante activo? (Sí/No)</Text>
           <TextInput
-            value={province}
-            onChangeText={text => setProvince(text)}
-            mode="outlined"
-            style={{ width: 360, height: 50 }}
-          />
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-          <View style={{ flex: 1, marginRight: 10 }}>
-            <Text style={{ marginBottom: 4 }}>Cantón</Text>
-            <TextInput
-              value={area}
-              onChangeText={text => setArea(text)}
-              mode="outlined"
-              style={{ height: 50 }}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ marginBottom: 4 }}>Distrito</Text>
-            <TextInput
-              value={district}
-              onChangeText={text => setDistrict(text)}
-              mode="outlined"
-              style={{ height: 50 }}
-            />
-          </View>
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 4 }}>¿Perteneces a una Organización? (Sí/No)</Text>
-          <TextInput
-            value={organization}
-            onChangeText={text => setOrganization(text)}
+            value={student}
+            onChangeText={text => setStudent(text)}
             mode="outlined"
             style={{ height: 50 }}
           />
         </View>
 
+        <View style={{ flex: 1 }}>
+          <Text style={{ marginBottom: 4 }}>Edad</Text>
+          <TextInput
+            value={age}
+            onChangeText={text => setAge(text)}
+            mode="outlined"
+            style={{ height: 50 }}
+          />
+        </View>
 
-       
-          <Button mode="contained"
-            buttonColor="#6200ee"
-            style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
-            labelStyle={{ fontSize: 16, lineHeight: 34 }}
-            onPress={handleSubmit}  
-          >
-            Inscribirse
-          </Button>
+      </View>
+
+
+
+      <View style={{ marginBottom: 16 }}>
+        <Text style={{ marginBottom: 4 }}>Provincia</Text>
+        <TextInput
+          value={province}
+          onChangeText={text => setProvince(text)}
+          mode="outlined"
+          style={{ width: 360, height: 50 }}
+        />
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={{ marginBottom: 4 }}>Cantón</Text>
+          <TextInput
+            value={area}
+            onChangeText={text => setArea(text)}
+            mode="outlined"
+            style={{ height: 50 }}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ marginBottom: 4 }}>Distrito</Text>
+          <TextInput
+            value={district}
+            onChangeText={text => setDistrict(text)}
+            mode="outlined"
+            style={{ height: 50 }}
+          />
+        </View>
+      </View>
+      <View style={{ marginBottom: 16 }}>
+        <Text style={{ marginBottom: 4 }}>¿Perteneces a una Organización? (Sí/No)</Text>
+        <TextInput
+          value={organization}
+          onChangeText={text => setOrganization(text)}
+          mode="outlined"
+          style={{ height: 50 }}
+        />
+      </View>
+
+
+
+      <Button mode="contained"
+        buttonColor="#6200ee"
+        style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+        labelStyle={{ fontSize: 16, lineHeight: 34 }}
+        onPress={handleSubmit}
+      >
+        Inscribirse
+      </Button>
 
     </ScrollView>
   )

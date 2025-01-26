@@ -5,9 +5,9 @@ import { Button, Card, Text, Searchbar, IconButton, MD3Colors, FAB } from 'react
 import { Link, router } from 'expo-router';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-// Define the Course interface
+
 interface Course {
   id: string;
   title: string;
@@ -33,8 +33,8 @@ export default function TechAcademy() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState(''); // Search query state
-  
+  const [searchQuery, setSearchQuery] = useState('');
+
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   useEffect(() => {
@@ -44,8 +44,8 @@ export default function TechAcademy() {
         const token = await AsyncStorage.getItem('userToken');
         if (token) {
           const decoded: any = jwtDecode(token);
-          const userRole = decoded.userRole; 
-          setUser({ access: userRole }); // Set the user state 
+          const userRole = decoded.userRole;
+          setUser({ access: userRole });
         } else {
           Alert.alert("Error", "User token not found. Please log in again.");
         }
@@ -55,14 +55,13 @@ export default function TechAcademy() {
       }
     };
     const fetchCourses = async () => {
-      console.log("Fetching courses from:", apiUrl); // Log the API URL
+
       try {
         const response = await axios.get(`${apiUrl}/api/getAllCourses`);
-        console.log("Fetched courses data:", response.data); // Log the fetched data
         setCourses(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching courses:", err); // Log any error
+        console.error("Error fetching courses:", err);
         setError('Failed to load courses');
         setLoading(false);
       }
@@ -71,12 +70,12 @@ export default function TechAcademy() {
     fetchCourses();
   }, [apiUrl]);
 
-  // Handle deleting a course
+
   const handleDeleteCourse = async (id: string) => {
     try {
       await axios.delete(`${apiUrl}/api/deleteCourse/${id}`);
       setCourses(prevCourses => prevCourses.filter(course => course.id !== id));
-      Alert.alert("Success", "Course deleted successfully");
+      Alert.alert("Curso Eliminado", "El curso ha sido eliminado");
     } catch (error) {
       console.error("Error deleting course:", error);
       Alert.alert("Error", "Failed to delete course");
@@ -84,25 +83,25 @@ export default function TechAcademy() {
   };
 
   const confirmDeleteCourse = (courseId: string) => {
-      Alert.alert(
-        "Confirm Deletion",
-        "Are you sure you want to delete this course? This action cannot be undone.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Yes, Delete",
-            style: "destructive",
-            onPress: () => handleDeleteCourse(courseId),
-          },
-        ]
-      );
-    };
+    Alert.alert(
+      "Confirmar Borrado",
+      "¿Está seguro de elminar este curso? Esta acción no se puede revertir.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: () => handleDeleteCourse(courseId),
+        },
+      ]
+    );
+  };
 
-  // Filter courses based on the search query
-  const filteredCourses = courses.filter(course => 
+
+  const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -124,7 +123,7 @@ export default function TechAcademy() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
-      {/* Search Bar */}
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 15 }}>
         <Searchbar
           placeholder="Buscar Curso"
@@ -133,23 +132,10 @@ export default function TechAcademy() {
         />
       </View>
 
-       {/* FAB placed like Searchbar */}
-       {user?.access === 'admin' && (
-           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 3, marginBottom: 15 }}>
-          
-           <FAB
-             icon="plus"
-             label="Agregar Curso"
-             style={{
-               backgroundColor: '#6200ee',
-             }}
-             onPress={() => router.push('/rocketStudent/addCourse')}
-           />
-          
-         </View>
-           )}
 
-      {/* Display filtered courses */}
+
+
+
       {filteredCourses.length > 0 ? (
         filteredCourses.map((course) => (
           <Card key={course.id} style={{ marginBottom: 16 }}>
@@ -169,27 +155,27 @@ export default function TechAcademy() {
               <Text variant="bodyMedium">Disponibilidad: {course.availability}</Text>
             </Card.Content>
             <Card.Actions>
-            {user?.access === 'admin' && ( 
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <IconButton
-      icon="pencil"
-      iconColor={MD3Colors.error50}
-      size={20}
-      onPress={() => router.push(`/techAcademy/editCourse?id=${course.id}`)}
-    />
-  <IconButton
-      icon="delete"
-      iconColor={MD3Colors.error50}
-      size={20}
-      onPress={() => confirmDeleteCourse(course.id)}
-    />
-  </View>
-            )}
+              {user?.access === 'admin' && (
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <IconButton
+                    icon="pencil"
+                    iconColor={MD3Colors.error50}
+                    size={20}
+                    onPress={() => router.push(`/techAcademy/editCourse?id=${course.id}`)}
+                  />
+                  <IconButton
+                    icon="delete"
+                    iconColor={MD3Colors.error50}
+                    size={20}
+                    onPress={() => confirmDeleteCourse(course.id)}
+                  />
+                </View>
+              )}
               <Link href={`/techAcademy/${course.id}`} asChild>
-                <Button 
-                  mode="contained" 
+                <Button
+                  mode="contained"
                   buttonColor="#6200ee"
-                  style={{ paddingHorizontal: 2, height: 56 }} 
+                  style={{ paddingHorizontal: 2, height: 56 }}
                   labelStyle={{ fontSize: 16, lineHeight: 34 }}
                 >
                   Inscribirse

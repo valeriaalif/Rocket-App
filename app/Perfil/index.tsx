@@ -20,7 +20,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserInfo | null>(null);
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Profile() {
     try {
       await AsyncStorage.removeItem('userToken');
       Alert.alert('Logged Out', 'You have been logged out successfully.');
-      router.push('/'); // Adjust path as per your app's login route
+      router.push('/');
     } catch (error) {
       Alert.alert('Error', 'Something went wrong while logging out.');
     }
@@ -66,21 +66,21 @@ export default function Profile() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Profile Image */}
+
       <View style={styles.profileImageContainer}>
         <Image
-          source={{ uri: "https://via.placeholder.com/150" }} // Replace with actual profile image URL
+          source={{ uri: "https://via.placeholder.com/150" }}
           style={styles.profileImage}
         />
       </View>
 
-      {/* User Information */}
+
       <View style={styles.userInfoContainer}>
         <Text style={styles.userName}>{user?.name || "No Name Available"}</Text>
         <Text style={styles.userEmail}>{user?.email || "Not Available"}</Text>
       </View>
 
-      {/* Additional Details */}
+
       <View style={styles.detailsContainer}>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Edad:</Text>
@@ -101,34 +101,34 @@ export default function Profile() {
       </View>
 
       <View style={styles.buttonContainer}>
-  <Button
-    mode="contained"
-    buttonColor="#6200ee"
-    style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
-    labelStyle={{ fontSize: 16, lineHeight: 34 }}
-    onPress={() => router.push(`/forgot-pwd`)}
-  >
-    Cambiar Contraseña
-  </Button>
-  <Button
-    mode="contained"
-    buttonColor="#6200ee"
-    style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
-    labelStyle={{ fontSize: 16, lineHeight: 34 }}
-    onPress={() => router.push(`/Perfil/editProfile`)}
-  >
-    Editar Perfil
-  </Button>
-  <Button
-    mode="contained"
-    buttonColor="#d32f2f"
-    style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
-    labelStyle={{ fontSize: 16, lineHeight: 34 }}
-    onPress={handleLogout}
-  >
-    Cerrar Sesión
-  </Button>
-</View>
+        <Button
+          mode="contained"
+          buttonColor="#6200ee"
+          style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+          labelStyle={{ fontSize: 16, lineHeight: 34 }}
+          onPress={() => router.push(`/forgot-pwd`)}
+        >
+          Cambiar Contraseña
+        </Button>
+        <Button
+          mode="contained"
+          buttonColor="#6200ee"
+          style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+          labelStyle={{ fontSize: 16, lineHeight: 34 }}
+          onPress={() => router.push(`/Perfil/editProfile`)}
+        >
+          Editar Perfil
+        </Button>
+        <Button
+          mode="contained"
+          buttonColor="#d32f2f"
+          style={{ paddingHorizontal: 72, height: 56, marginTop: 10 }}
+          labelStyle={{ fontSize: 16, lineHeight: 34 }}
+          onPress={handleLogout}
+        >
+          Cerrar Sesión
+        </Button>
+      </View>
 
     </ScrollView>
   );

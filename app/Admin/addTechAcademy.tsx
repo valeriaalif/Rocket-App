@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView, Alert, StyleSheet } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import Constants from "expo-constants";
@@ -10,7 +10,7 @@ interface FormData {
   teacher: string;
   startDate: string;
   finishDate: string;
-  schedule: string; // or string if you prefer
+  schedule: string;
   duration: string;
   platform: string;
   totalHours: string;
@@ -26,58 +26,54 @@ interface FormData {
   difficulty: string;
 }
 
-export default function AddCourse() {
-  const [title, setTitle] = React.useState("");
-  const [teacher, setTeacher] = React.useState("");
-  const [startDate, setStartDate] = React.useState("");
-  const [finishDate, setFinishDate] = React.useState("");
-  const [schedule, setSchedule] = React.useState("");
-  const [duration, setDuration] = React.useState("");
-  const [platform, setPlatform] = React.useState("");
-  const [totalHours, setTotalHours] = React.useState("");
-  const [mode, setMode] = React.useState("");
-  const [availability, setAvailability] = React.useState("");
-  const [inscriptionEndDate, setInscriptionEndDate] = React.useState("");
-  const [sendEmailDate, setSendEmailDate] = React.useState("");
-  const [benefits, setBenefits] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [content, setContent] = React.useState("");
-  const [audience, setAudience] = React.useState("");
-  const [requirements, setRequirements] = React.useState("");
-  const [difficulty, setDifficulty] = React.useState("");
+export default function AddCourseTechAcademy() {
+  const [title, setTitle] = useState("");
+  const [teacher, setTeacher] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [finishDate, setFinishDate] = useState("");
+  const [schedule, setSchedule] = useState("");
+  const [duration, setDuration] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [totalHours, setTotalHours] = useState("");
+  const [mode, setMode] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [inscriptionEndDate, setInscriptionEndDate] = useState("");
+  const [sendEmailDate, setSendEmailDate] = useState("");
+  const [benefits, setBenefits] = useState("");
+  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
+  const [audience, setAudience] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+
   const apiUrl = Constants.expoConfig?.extra?.API_URL;
 
   const handleSubmit = async () => {
     try {
+      const formData: FormData = {
+        title,
+        teacher,
+        startDate,
+        finishDate,
+        schedule,
+        duration,
+        platform,
+        totalHours,
+        mode,
+        availability,
+        inscriptionEndDate,
+        sendEmailDate,
+        benefits,
+        description,
+        content,
+        audience,
+        requirements,
+        difficulty,
+      };
 
-        // Prepare the form data
-        const formData: FormData = {
-         title: title,
-         teacher: teacher,
-         startDate: startDate,
-         finishDate: finishDate,
-         schedule: schedule, // or string if you prefer
-         duration: duration,
-         platform: platform,
-         totalHours: totalHours,
-         mode: mode,
-         availability: availability, 
-         inscriptionEndDate: inscriptionEndDate,
-         sendEmailDate: sendEmailDate,
-         benefits: benefits,
-         description: description,
-         content: content,
-         audience: audience,
-         requirements: requirements,
-         difficulty: difficulty
-        };
-  
-            // Log formData to verify its structure
-            console.log("Form Data:", formData);
-  
       await axios.post(`${apiUrl}/api/registerCourse`, formData);
-      Alert.alert("Success", "Course registered successfully");
-      router.push("/(tabs)/rocketStudent");
+      Alert.alert("Curso Registrado", "El curso ha sido registrado exitosamente");
+      router.push("/Admin/");
     } catch (err) {
       console.error("Error submitting form:", err);
       Alert.alert("Error", "Failed to submit the form.");
@@ -86,213 +82,68 @@ export default function AddCourse() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Formulario de Inscripción</Text>
+      <Text style={styles.heading}>Formulario para Agregar Curso</Text>
 
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Título del Curso</Text>
-        <TextInput
-          value={title}
-          onChangeText={setTitle}
-          mode="outlined"
-          style={styles.input}
-        />
+    
+      {[ 
+        { label: "Título del Curso", value: title, setter: setTitle },
+        { label: "Nombre del Docente", value: teacher, setter: setTeacher },
+        { label: "Fecha de Inicio", value: startDate, setter: setStartDate },
+        { label: "Fecha de Culminación", value: finishDate, setter: setFinishDate },
+        { label: "Horario", value: schedule, setter: setSchedule },
+        { label: "Duración", value: duration, setter: setDuration },
+        { label: "Plataforma", value: platform, setter: setPlatform },
+        { label: "Total de Horas", value: totalHours, setter: setTotalHours },
+        { label: "Modalidad", value: mode, setter: setMode },
+        { label: "Disponibilidad", value: availability, setter: setAvailability },
+        { label: "Fecha Límite de Inscripción", value: inscriptionEndDate, setter: setInscriptionEndDate },
+        { label: "Fecha de Envío de Correos", value: sendEmailDate, setter: setSendEmailDate },
+        { label: "Nivel de Dificultad", value: difficulty, setter: setDifficulty },
+      ].map((input, index) => (
+        <View style={styles.formGroup} key={index}>
+          <Text style={styles.label}>{input.label}</Text>
+          <TextInput
+            value={input.value}
+            onChangeText={input.setter}
+            mode="outlined"
+            style={styles.input}
+          />
+        </View>
+      ))}
+
+      {[
+        { label: "Beneficios", value: benefits, setter: setBenefits },
+        { label: "Descripción", value: description, setter: setDescription },
+        { label: "Contenido del Curso", value: content, setter: setContent },
+        { label: "¿A quién va dirigido el curso?", value: audience, setter: setAudience },
+        { label: "Requisitos", value: requirements, setter: setRequirements },
+      ].map((input, index) => (
+        <View style={styles.formGroup} key={index}>
+          <Text style={styles.label}>{input.label}</Text>
+          <TextInput
+            value={input.value}
+            onChangeText={input.setter}
+            mode="outlined"
+            style={styles.multilineInput}
+            multiline
+            scrollEnabled
+            textAlignVertical="top"
+          />
+        </View>
+      ))}
+
+    
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          buttonColor="#6200ee"
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          onPress={handleSubmit}
+        >
+          Agregar Curso
+        </Button>
       </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Nombre del Docente</Text>
-        <TextInput
-          value={teacher}
-          onChangeText={setTeacher}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Fecha de Inicio</Text>
-        <TextInput
-          value={startDate}
-          onChangeText={setStartDate}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Fecha de Culminación</Text>
-        <TextInput
-          value={finishDate}
-          onChangeText={setFinishDate}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Horario</Text>
-        <TextInput
-          value={schedule}
-          onChangeText={setSchedule}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Duración</Text>
-        <TextInput
-          value={duration}
-          onChangeText={setDuration}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Plataforma</Text>
-        <TextInput
-          value={platform}
-          onChangeText={setPlatform}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Total de Horas</Text>
-        <TextInput
-          value={totalHours}
-          onChangeText={setTotalHours}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Modalidad</Text>
-        <TextInput
-          value={mode}
-          onChangeText={setMode}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Disponibilidad</Text>
-        <TextInput
-          value={availability}
-          onChangeText={setAvailability}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Fecha Límite de Inscripción</Text>
-        <TextInput
-          value={inscriptionEndDate}
-          onChangeText={setInscriptionEndDate}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Fecha de Envío de Correos</Text>
-        <TextInput
-          value={sendEmailDate}
-          onChangeText={setSendEmailDate}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Beneficios</Text>
-        <TextInput
-          value={benefits}
-          onChangeText={setBenefits}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Descripción</Text>
-        <TextInput
-          value={description}
-          onChangeText={setDescription}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Contenido del Curso</Text>
-        <TextInput
-          value={content}
-          onChangeText={setContent}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>¿A quién va dirigido el curso?</Text>
-        <TextInput
-          value={audience}
-          onChangeText={setAudience}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Requisitos</Text>
-        <TextInput
-          value={requirements}
-          onChangeText={setRequirements}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Nivel de Dificultad</Text>
-        <TextInput
-          value={difficulty}
-          onChangeText={setDifficulty}
-          mode="outlined"
-          style={styles.input}
-        />
-      </View>
-
-      <View
-  style={{
-    flex: 1,
-    alignItems: 'center', // Centers horizontally
-    marginTop: 20,        // Adds spacing from the form fields
-  }}
->
-  <Button
-    mode="contained"
-    buttonColor="#6200ee"
-    style={{
-      paddingHorizontal: 80, // Width of the button
-      height: 70,            // Height of the button
-      marginLeft: 22,
-    }}
-    labelStyle={{
-      fontSize: 16,          // Larger font size
-      lineHeight: 42,        // Adjust line height for text
-    }}
-    onPress={handleSubmit}
-  >
-    Registrar Curso
-  </Button>
-</View>
-
-
     </ScrollView>
   );
 }
@@ -301,7 +152,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    alignItems: "flex-start", // Align items to the start of the column
   },
   heading: {
     fontSize: 20,
@@ -310,7 +160,7 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginBottom: 16,
-    width: "100%", // Ensure input fields take full width
+    width: "100%",
   },
   label: {
     marginBottom: 4,
@@ -318,8 +168,22 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
   },
-  button: {
+  multilineInput: {
+    height: 120, 
+    textAlignVertical: "top",
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: "center",
     marginTop: 20,
-    alignSelf: "center", // Align the button to the start of the column
+  },
+  button: {
+    paddingHorizontal: 80,
+    height: 60,
+    marginLeft: 22,
+  },
+  buttonLabel: {
+    fontSize: 16,
+    lineHeight: 35,
   },
 });
