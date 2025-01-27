@@ -32,8 +32,6 @@ export default function Register() {
         password
       });
 
-      Alert.alert("Success", response.data.message);
-
 
       router.push('/(tabs)/rocketStudent');
 

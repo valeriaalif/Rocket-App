@@ -49,7 +49,7 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userToken');
-      Alert.alert('Logged Out', 'You have been logged out successfully.');
+      Alert.alert('Sesión Cerrada', 'Ha cerrado sesión existosamente');
       router.push('/');
     } catch (error) {
       Alert.alert('Error', 'Something went wrong while logging out.');
