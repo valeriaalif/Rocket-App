@@ -11,6 +11,15 @@ interface CourseInfo {
   id: string;
   title: string;
   teacher: string;
+  startDate: string;
+  finishDate: string;
+  schedule: string;
+  duration: string;
+  totalHours: string;
+  platform: string;
+  mode: string;
+  availability: string;
+  inscriptionEndDate: string;
   sendEmailDate: string;
   benefits: string;
   audience: string;
@@ -112,6 +121,71 @@ export default function editCourse() {
               mode="outlined"
               style={{ marginBottom: 10 }}
             />
+
+            <TextInput
+              label="Start Date"
+              value={editableCourse.startDate}
+              onChangeText={(text) => handleFieldChange('startDate', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Finish Date"
+              value={editableCourse.finishDate}
+              onChangeText={(text) => handleFieldChange('finishDate', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Schedule"
+              value={editableCourse.schedule}
+              onChangeText={(text) => handleFieldChange('schedule', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Duration"
+              value={editableCourse.duration}
+              onChangeText={(text) => handleFieldChange('duration', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Total Hours"
+              value={editableCourse.totalHours}
+              onChangeText={(text) => handleFieldChange('totalHours', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Platform"
+              value={editableCourse.platform}
+              onChangeText={(text) => handleFieldChange('platform', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Mode"
+              value={editableCourse.mode}
+              onChangeText={(text) => handleFieldChange('mode', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Availability"
+              value={editableCourse.availability}
+              onChangeText={(text) => handleFieldChange('availability', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              label="Inscription End Date"
+              value={editableCourse.inscriptionEndDate}
+              onChangeText={(text) => handleFieldChange('inscriptionEndDate', text)}
+              mode="outlined"
+              style={{ marginBottom: 10 }}
+            />
+
             <TextInput
               label="Audience"
               value={editableCourse.audience}

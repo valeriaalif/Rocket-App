@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, Alert, StyleSheet } from "react-native";
-import { Button, Card, Text, TextInput } from 'react-native-paper';
+import { Button, Text, TextInput } from 'react-native-paper';
 import Constants from "expo-constants";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
+import { router } from "expo-router";
 
 
 interface UserInfo {
@@ -31,7 +32,6 @@ export default function EditProfile() {
       try {
 
         const storedToken = await AsyncStorage.getItem('userToken');
-        console.log("Token:", token);
 
         if (!storedToken) {
           Alert.alert("Error", "User is not authenticated.");
@@ -42,10 +42,7 @@ export default function EditProfile() {
 
         const decoded: any = jwtDecode(storedToken);
         const userId = decoded.Id;
-
-
         const response = await axios.get(`${apiUrl}/api/getUser/${userId}`);
-        console.log("Fetched user data:", response.data);
         setUser(response.data);
         setEditableUser(response.data);
         setLoading(false);
@@ -85,7 +82,8 @@ export default function EditProfile() {
         }
       );
 
-      Alert.alert("Success", "User data updated successfully!");
+      Alert.alert("Perfil Modificado", "Se han guardado los cambios");
+      router.push("/Perfil/")
     } catch (err) {
       console.error("Error updating user:", err);
       Alert.alert("Error", "Failed to update the user.");

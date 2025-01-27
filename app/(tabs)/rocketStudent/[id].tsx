@@ -246,7 +246,7 @@ export default function Page() {
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
         <View style={{ flex: 1, marginRight: 10 }}>
-          <Text style={{ marginBottom: 4 }}>¿Eres un estudiante activo? (Sí/No)</Text>
+          <Text style={{ marginBottom: 4 }}>¿Eres un estudiante activo?</Text>
           <TextInput
             value={student}
             onChangeText={text => setStudent(text)}

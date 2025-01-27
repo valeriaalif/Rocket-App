@@ -3,11 +3,11 @@ import { Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IconButton } from 'react-native-paper';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import AdminDrawer from '../../../components/AdminDrawer';
 
 interface User {
-  access: 'admin' | 'student';
+  access: 'admin' | 'user';
 }
 
 export default function _layout() {
@@ -37,34 +37,51 @@ export default function _layout() {
     fetchUser();
   }, []);
 
+  const renderHeaderRight = () => {
+    if (user?.access === 'admin') {
+      return (
+        <IconButton
+          icon="menu"
+          size={24}
+          iconColor="#6200ee"
+          style={{
+            height: 56,
+            width: 56,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={toggleDrawer}
+        />
+      );
+    } else if (user?.access === 'user') {
+      return (
+        <IconButton
+          icon="account-circle"
+          size={24}
+          iconColor="#6200ee"
+          style={{
+            height: 56,
+            width: 56,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => router.push('/Perfil/')}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
-
-      <AdminDrawer
-        isVisible={isDrawerVisible}
-        onClose={toggleDrawer}
-      />
+      <AdminDrawer isVisible={isDrawerVisible} onClose={toggleDrawer} />
 
       <Stack>
         <Stack.Screen
           name="index"
           options={{
-            title: 'RocketStudent',
-            headerRight: () =>
-              user?.access === 'admin' && (
-                <IconButton
-                  icon="menu"
-                  size={24}
-                  iconColor="#6200ee"
-                  style={{
-                    height: 56,
-                    width: 56,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  onPress={toggleDrawer}
-                />
-              ),
+            title: 'Rocket Student',
+            headerRight: renderHeaderRight,
           }}
         />
         <Stack.Screen
@@ -73,7 +90,6 @@ export default function _layout() {
             title: 'Post details',
           }}
         />
-
       </Stack>
     </>
   );
