@@ -36,3 +36,9 @@ options for devices.
 1. Download the Expo Go app from the PlayStore/AppStore
 2. Open the app and scan the QR that displays in the terminal
 3.  You are ready to go!
+
+## Rocket Girls
+
+Rocket Girls, born in the heart of Costa Rica in 2018, is not just a non-profit organization; It is a catalyst for change. 
+Our mission is clear: empower minorities through the transformative force of technology. If you want to learn more please
+click on this link https://www.rocketgirls.org
